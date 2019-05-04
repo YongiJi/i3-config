@@ -59,7 +59,7 @@ font-5 = Font Awesome 5 Brands:pixelsize=9
 
 modules-left = i3 xwindow
 modules-center = date
-modules-right = alsa xkeyboard cpu memory powermenu
+modules-right = mpd alsa xkeyboard cpu memory powermenu
 
 tray-position = right
 tray-padding = 2
@@ -147,7 +147,6 @@ label-visible-padding = 1
 
 label-urgent = %icon%
 label-urgent-foreground = #ff4c4c
-label-urgent-background = #cc0000
 label-urgent-padding = 1
 
 label-separator = 
@@ -362,6 +361,7 @@ type = custom/menu
 expand-right = true
 
 format = <label-toggle> <menu>
+format-foreground = ${colors.secondary}
 
 label-open = 
 label-close = 
