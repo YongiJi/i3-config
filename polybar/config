@@ -50,16 +50,15 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = fixed:pixelsize=10;1
-font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
-font-2 = siji:pixelsize=10;1
-font-3 = Font Awesome 5 Free:pixelsize=9
-font-4 = Font Awesome 5 Free Solid:pixelsize=9
-font-5 = Font Awesome 5 Brands:pixelsize=9
+; font-n = <fontconfig pattern>;<vertical offset>
+font-0 = Liberation Sans:style=Italic:pixelsize=10
+font-1 = Font Awesome 5 Free:pixelsize=8
+font-2 = Font Awesome 5 Free Solid:pixelsize=8
+font-3 = Font Awesome 5 Brands:pixelsize=9
 
 modules-left = i3 xwindow
-modules-center = date
-modules-right = mpd alsa xkeyboard cpu memory powermenu
+modules-center = spotify
+modules-right = cpu memory mpd pulseaudio xkeyboard updates-arch-combined date powermenu
 
 tray-position = right
 tray-padding = 2
@@ -76,7 +75,7 @@ tray-padding = 2
 ;scroll-up = i3wm-wsnext
 ;scroll-down = i3wm-wsprev
 
-;cursor-click = pointer
+cursor-click = pointer
 ;cursor-scroll = ns-resize
 
 [module/xwindow]
@@ -119,12 +118,13 @@ type = internal/i3
 index-sort = true
 enable-click = false
 wrapping-scroll = false
-reverse-scroll = false
+reverse-scroll = true
 
 ws-icon-0 = 1;
 ws-icon-1 = 2;
 ws-icon-2 = 3;
 ws-icon-3 = 4;
+ws-icon-4 = 5;
 ws-icon-default = 
 
 format = <label-state> <label-mode>
@@ -246,14 +246,13 @@ format-disconnected =
 type = internal/date
 interval = 1
 
-date = " %a / %d / %b"
-date-alt = " %d-%b-%Y"
+date = 
+date-alt = " %a / %d / %b"
 
 time = %H:%M:%S
 time-alt = %H:%M
 
-format =  <label>
-format-underline = #00c
+format = <label>
 format-foreground = #e5e5e5
 
 label = %date% %time%
@@ -261,29 +260,21 @@ label = %date% %time%
 [module/pulseaudio]
 type = internal/pulseaudio
 
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL %percentage%%
-label-volume-foreground = ${root.foreground}
+use-ui-max = false
 
-label-muted = 🔇 muted
-label-muted-foreground = #666
+interval = 5
 
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
-bar-volume-gradient = false
-bar-volume-indicator = |
-bar-volume-indicator-font = 2
-bar-volume-fill = ─
-bar-volume-fill-font = 2
-bar-volume-empty = ─
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
+format-volume = <ramp-volume> <label-volume>
+
+label-muted =  mute
+label-muted-foreground = #939393
+
+label-volume-foreground = #7fff7f
+ramp-volume-foreground = #7fff7f
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
 
 [module/alsa]
 type = internal/alsa
@@ -374,6 +365,8 @@ menu-0-1 = Reboot
 menu-0-1-exec = menu-open-2
 menu-0-2 = Lock
 menu-0-2-exec = menu-open-3
+menu-0-3 = Suspend
+menu-0-3-exec = menu-open-4
 
 menu-1-0 = Shutdown?
 menu-1-0-exec = shutdown now
@@ -386,9 +379,14 @@ menu-2-1 = Cancel
 menu-2-1-exec = menu-open-0
 
 menu-3-0 = Lock?
-menu-3-0-exec = betterlockscreen -l dimblur
+menu-3-0-exec = betterlockscreen -l dim
 menu-3-1 = Cancel
 menu-3-1-exec = menu-open-0
+
+menu-4-0 = Suspend?
+menu-4-0-exec = systemctl suspend
+menu-4-1 = Cancel
+menu-4-1-exec = menu-open-0
 
 [settings]
 screenchange-reload = true
@@ -401,5 +399,18 @@ screenchange-reload = true
 [global/wm]
 margin-top = 5
 margin-bottom = 5
+
+[module/updates-arch-combined]
+type = custom/script
+exec = ~/.config/polybar/updates-arch-combined.sh
+interval = 10
+
+[module/spotify]
+type = custom/script
+interval = 2
+format-prefix = " "
+format = <label>
+format-foreground = #7fff7f
+exec = python ~/.config/polybar/spotify.py -f '{artist}: {song}'
 
 ; vim:ft=dosini
